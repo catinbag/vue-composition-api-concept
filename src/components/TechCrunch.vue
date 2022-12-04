@@ -10,9 +10,9 @@
     </label>
     <hr />
     <div>
-      <button :disabled="page.value === 1" @click="page.value -= 1">Prev</button>
+      <button :disabled="page.value === 1" @click="prevPage">Prev</button>
       {{ page.value }}
-      <button @click="page.value += 1">Next</button>
+      <button @click="nextPage">Next</button>
     </div>
     <hr />
 
@@ -43,11 +43,8 @@ export default {
       this.categories = await getCategories()
     }
   },
-
-  created() {
-    this.loadCategories()
-
-    const { page, filters, items } = useFilterable(
+  setup() {
+    const { page, nextPage, prevPage, filters, items } = useFilterable(
       {
         loadItems: getPosts,
         initFilter: { categories: null }
@@ -55,9 +52,15 @@ export default {
       this
     )
 
-    this.items = items
-    this.page = page
-    this.filters = filters
+    this.loadCategories()
+
+    return {
+      page,
+      nextPage,
+      prevPage,
+      filters,
+      items
+    }
   }
 }
 </script>

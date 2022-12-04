@@ -1,11 +1,22 @@
-import Vue from 'vue'
+import { watch, onBeforeDestroy, ref, reactive } from './../../vue-patch'
 
 export function useFilterable({ loadItems, initFilter }, component) {
-  const page = Vue.observable({ value: 1 })
-  const filters = Vue.observable(initFilter)
-  const items = Vue.observable({ value: [] })
+  const page = ref(1)
 
-  const watch = component.$watch.bind(component)
+  function setPage(val) {
+    page.value = Number(val)
+  }
+
+  function nextPage() {
+    setPage(page.value + 1)
+  }
+
+  function prevPage() {
+    setPage(page.value - 1)
+  }
+
+  const filters = reactive(initFilter)
+  const items = ref([])
 
   async function loadData() {
     const responseItems = await loadItems({
@@ -20,7 +31,7 @@ export function useFilterable({ loadItems, initFilter }, component) {
     const urlParams = new URLSearchParams(window.location.hash.substring(1))
     const { page: pageValue, ...filtersValue } = Object.fromEntries(urlParams.entries())
     if (pageValue !== undefined) {
-      page.value = pageValue
+      setPage(pageValue)
     }
 
     Object.entries(filtersValue).forEach(([key, value]) => {
@@ -44,9 +55,6 @@ export function useFilterable({ loadItems, initFilter }, component) {
   syncHash()
   loadData()
 
-  window.addEventListener('hashchange', syncHash)
-  component.$on('hook:beforeDestroy', () => window.removeEventListener('hashchange', syncHash))
-
   watch(
     () => page.value,
     () => {
@@ -58,6 +66,7 @@ export function useFilterable({ loadItems, initFilter }, component) {
   watch(
     () => filters,
     () => {
+      /* bug, double value setting */
       page.value = 1
       loadData()
       updateHash()
@@ -65,8 +74,13 @@ export function useFilterable({ loadItems, initFilter }, component) {
     { deep: true }
   )
 
+  window.addEventListener('hashchange', syncHash)
+  onBeforeDestroy(() => window.removeEventListener('hashchange', syncHash))
+
   return {
     page,
+    nextPage,
+    prevPage,
     filters,
     items
   }
