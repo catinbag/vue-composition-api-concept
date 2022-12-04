@@ -9,13 +9,8 @@
       </select>
     </label>
     <hr />
-    <div>
-      <button :disabled="page.value === 1" @click="prevPage">Prev</button>
-      {{ page.value }}
-      <button @click="nextPage">Next</button>
-    </div>
+    <ThePagination :page="page" @next-page="nextPage" @prev-page="prevPage" />
     <hr />
-
     <ul>
       <li v-for="item in items.value" :key="item.id">
         <a target="_blank" :href="item.link">{{ item.title.rendered }}</a>
@@ -23,12 +18,17 @@
     </ul>
   </div>
 </template>
+
 <script>
+import ThePagination from './Pagination.vue'
 import { useFilterable } from './composables/filterable'
 import { getPosts, getCategories } from '../api/techcrunch'
 
 export default {
   name: 'TechCrunchView',
+  components: {
+    ThePagination
+  },
   data() {
     return {
       categories: []

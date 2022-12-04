@@ -2,11 +2,7 @@
   <div>
     <label>UserId: <input v-model.lazy="filters.userId"/></label>
     <hr />
-    <div>
-      <button :disabled="page.value === 1" @click="prevPage">Prev</button>
-      {{ page.value }}
-      <button @click="nextPage">Next</button>
-    </div>
+    <ThePagination :page="page" @next-page="nextPage" @prev-page="prevPage" />
     <hr />
     <ul>
       <li v-for="item in items.value" :key="item.id">
@@ -16,11 +12,15 @@
   </div>
 </template>
 <script>
+import ThePagination from './Pagination.vue'
 import { useFilterable } from './composables/filterable'
 import { getPosts } from '../api/placeholder'
 
 export default {
   name: 'PlaceholderView',
+  components: {
+    ThePagination
+  },
   data() {
     return {
       items: []
