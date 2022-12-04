@@ -10,14 +10,14 @@
     </label>
     <hr />
     <div>
-      <button :disabled="page === 1" @click="page -= 1">Prev</button>
-      {{ page }}
-      <button @click="page += 1">Next</button>
+      <button :disabled="page.value === 1" @click="page.value -= 1">Prev</button>
+      {{ page.value }}
+      <button @click="page.value += 1">Next</button>
     </div>
     <hr />
 
     <ul>
-      <li v-for="item in items" :key="item.id">
+      <li v-for="item in items.value" :key="item.id">
         <a target="_blank" :href="item.link" v-html="item.title.rendered" />
       </li>
     </ul>
@@ -25,10 +25,9 @@
 </template>
 <script>
 import { getPosts, getCategories } from '../api/techcrunch'
-import { filterableMixin } from './mixins/filterable'
+import { useFilterable } from './composables/filterable'
 
 export default {
-  mixins: [filterableMixin],
   data() {
     return {
       categories: []
@@ -42,18 +41,23 @@ export default {
   methods: {
     async loadCategories() {
       this.categories = await getCategories()
-    },
-
-    async loadItems() {
-      this.items = await getPosts({
-        page: this.page,
-        filters: this.filters
-      })
     }
   },
 
   created() {
     this.loadCategories()
+
+    const { page, filters, items } = useFilterable(
+      {
+        loadItems: getPosts,
+        initFilter: { categories: null }
+      },
+      this
+    )
+
+    this.items = items
+    this.page = page
+    this.filters = filters
   }
 }
 </script>
