@@ -26,10 +26,6 @@ export function reactive(value) {
   return Vue.observable(value)
 }
 
-export function computed(value) {
-  return currentInstance.$computed()
-}
-
 export function watch(...args) {
   return currentInstance.$watch(...args)
 }
