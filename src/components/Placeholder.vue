@@ -10,38 +10,37 @@
     <hr />
     <ul>
       <li v-for="item in items.value" :key="item.id">
-        <a target="_blank" :href="`https://jsonplaceholder.typicode.com/posts/${item.id}`">
-          {{ item.title }}
-        </a>
+        <a target="_blank" :href="`${POST_URL}/${item.id}`">{{ item.title }}</a>
       </li>
     </ul>
   </div>
 </template>
 <script>
-import { getPosts } from '../api/placeholder'
 import { useFilterable } from './composables/filterable'
+import { getPosts } from '../api/placeholder'
 
 export default {
+  name: 'PlaceholderView',
   data() {
     return {
       items: []
     }
   },
   setup() {
-    const { page, nextPage, prevPage, filters, items } = useFilterable(
-      {
-        loadItems: getPosts,
-        initFilter: { userId: '' }
-      },
-      this
-    )
+    const { page, nextPage, prevPage, filters, items } = useFilterable({
+      loadItems: getPosts,
+      initFilter: { userId: '' }
+    })
+
+    const POST_URL = 'https://jsonplaceholder.typicode.com/posts'
 
     return {
       page,
       nextPage,
       prevPage,
       filters,
-      items
+      items,
+      POST_URL
     }
   }
 }

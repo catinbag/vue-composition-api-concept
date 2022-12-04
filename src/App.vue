@@ -5,20 +5,20 @@
       <option value="placeholder">Placeholder</option>
     </select>
     <hr />
-    <TechCrunch v-if="selectedTab === 'techcrunch'" />
-    <Placeholder v-if="selectedTab === 'placeholder'" />
+    <TechCrunchView v-if="selectedTab === 'techcrunch'" />
+    <PlaceholderView v-if="selectedTab === 'placeholder'" />
   </div>
 </template>
 
 <script>
-import TechCrunch from './components/TechCrunch.vue'
-import Placeholder from './components/Placeholder.vue'
+import TechCrunchView from './components/TechCrunch.vue'
+import PlaceholderView from './components/Placeholder.vue'
 
 export default {
   name: 'App',
   components: {
-    TechCrunch,
-    Placeholder
+    TechCrunchView,
+    PlaceholderView
   },
   data() {
     return {
