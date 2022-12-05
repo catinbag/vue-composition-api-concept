@@ -29,7 +29,10 @@ export function reactive(value) {
 export function computed(fn) {
   const result = ref(fn())
 
-  /* add wathing */
+  /**
+   * add wathing
+   * https://github.com/vuejs/composition-api/blob/main/src/apis/computed.ts
+   * */
 
   return result
 }

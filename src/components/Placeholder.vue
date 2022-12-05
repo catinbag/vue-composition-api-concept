@@ -21,11 +21,6 @@ export default {
   components: {
     ThePagination
   },
-  data() {
-    return {
-      items: []
-    }
-  },
   setup() {
     const { page, nextPage, prevPage, filters, items } = useFilterable({
       loadItems: getPosts,
