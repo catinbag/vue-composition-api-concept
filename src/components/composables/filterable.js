@@ -1,6 +1,6 @@
 import { watch, onBeforeDestroy, ref, reactive } from './../../vue-patch'
 
-export function useFilterable({ loadItems, initFilter }, component) {
+export function useFilterable({ loadItems, initFilter }) {
   const page = ref(1)
 
   function setPage(val) {

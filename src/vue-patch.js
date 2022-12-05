@@ -26,6 +26,14 @@ export function reactive(value) {
   return Vue.observable(value)
 }
 
+export function computed(fn) {
+  const result = ref(fn())
+
+  /* add wathing */
+
+  return result
+}
+
 export function watch(...args) {
   return currentInstance.$watch(...args)
 }
@@ -33,5 +41,3 @@ export function watch(...args) {
 export function onBeforeDestroy(fn) {
   currentInstance.$on('hook:beforeDestroy', () => fn())
 }
-
-// TODO: wrap computed
